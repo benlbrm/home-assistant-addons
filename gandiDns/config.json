@@ -1,6 +1,6 @@
 {
   "name": "GandiDNS",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "slug": "gandi-dns",
   "description": "Update Gandi dns zone",
   "url": "https://github.com/benlbrm/home-assistant-addons/",
@@ -13,7 +13,7 @@
     "reccords": []
   },
   "schema": {
-    "api_key": "str",
+    "token": "str",
     "domain": "str",
     "reccords": ["str"]
   }

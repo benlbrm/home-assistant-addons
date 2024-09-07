@@ -16,7 +16,7 @@ get_gandi_ip() {
     token=$3
     
     bashio::log.debug "[Gandi] - Get data for - ${domain} - ${reccord}"
-    echo "$(curl -s -H "Authorization: Bearer ${token}" https://api.gandi.net/v5/livedns/domains/${domain}/records/${reccord} | jq -r '.[].rrset_values[0]')"
+    echo "$(curl -s -H "Authorization: Bearer ${token}" https://api.gandi.net/v5/livedns/domains/${domain}/records/${reccord} | jq -r 'try .[].rrset_values[0] catch "Invalid response"')"
 }
 
 update_gandi_ip() {
@@ -53,9 +53,10 @@ main() {
         gandi_ip=$(get_gandi_ip "${domain}" "${reccords[0]}" "${token}")
         bashio::log.debug "Gandi ip is ${gandi_ip}"
 
-        if [ "${current_ip}" = "${gandi_ip}" ]; then
-            bashio::log.debug "IP's are correct"
-            sleep 600
+        if [ "${gandi_ip} = 'Invalid response'"]; then
+            bashio::log.error "Could not get response from API, make sure your PAT is working"
+        elif [ "${current_ip}" = "${gandi_ip}" ]; then
+            bashio::log.debug "Ip is correct"
         else
             bashio::log.debug "Ip did not match, need an update"
             for reccord in ${reccords}
