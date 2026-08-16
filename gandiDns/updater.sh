@@ -7,7 +7,7 @@
 # ==============================================================================
 
 get_current_ip() {
-    echo "$(curl -s ifconfig.me)"
+    echo "$(curl -s4 --max-time 10 ifconfig.me)"
 }
 
 get_gandi_ip() {
@@ -17,7 +17,11 @@ get_gandi_ip() {
     
     bashio::log.debug "[Gandi] - Get data for - ${domain} - ${record}"
     response=$(curl -s -H "Authorization: Bearer ${token}" https://api.gandi.net/v5/livedns/domains/${domain}/records/${record})
-    echo "$response" | jq -r '.[].rrset_values[0]' || bashio::log.error "Error parsing $response"
+    ip=$(echo "$response" | jq -r 'if type=="array" then .[0].rrset_values[0] else empty end')
+    if [ -z "${ip}" ]; then
+        bashio::log.error "Error parsing Gandi API response: ${response}"
+    fi
+    echo "${ip}"
 }
 
 update_gandi_ip() {
