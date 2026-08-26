@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: GandiDNS
-version: "0.0.3"
+version: "0.0.5"
 slug: gandi-dns
 description: Update Gandi dns zone
 url: "https://github.com/benlbrm/home-assistant-addons"
