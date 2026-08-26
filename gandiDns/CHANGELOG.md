@@ -18,3 +18,7 @@ Updating documentation
 - Force IPv4 when detecting the public IP (`curl -s4`). On a dual-stack network, curl was connecting over IPv6 and the add-on pushed an IPv6 address into an `A` record, which the Gandi LiveDNS API rejects with a 400 error (reported as a PAT permission issue).
 - Add a 10s timeout to the public IP detection request.
 - Make the Gandi API response parsing robust to error objects: instead of crashing with `jq: error: Cannot index string with string "rrset_values"`, the raw response is now logged as an error.
+
+## 0.0.5
+
+- Restore an explicit `build.yaml`. Recent Supervisor versions no longer provide a default `BUILD_FROM`, so the add-on failed to install with `base name (${BUILD_FROM}) should not be blank`. The base images are pinned to `ghcr.io/home-assistant/{arch}-base:3.21`, which ships bashio, curl and jq.
